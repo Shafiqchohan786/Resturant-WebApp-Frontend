@@ -23,7 +23,7 @@ export default function Reservation() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4000/api/v1/reservation/send', formData);
+      const response = await axios.post('https://resturant-backend.zeabur.app/api/v1/reservation/send', formData);
       console.log("Response from backend:", response.data);
       
       // Show success toast notification
