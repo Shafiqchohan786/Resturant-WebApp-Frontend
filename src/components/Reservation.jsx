@@ -48,7 +48,7 @@ export default function Reservation() {
 
     try {
       const response = await axios.post(
-        'https://resturant-backend.zeabur.app/api/v1/reservation/send',
+        'https://zaikafood.zeabur.app/api/v1/reservation/send',
         formData,
         {
           headers: { 'Content-Type': 'application/json' },
