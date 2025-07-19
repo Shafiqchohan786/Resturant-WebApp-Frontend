@@ -22,14 +22,42 @@ export default function Reservation() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validation checks
+    if (formData.firstName.trim().length < 3) {
+      toast.error("First name must be at least 3 characters.");
+      return;
+    }
+
+    if (formData.lastName.trim().length < 3) {
+      toast.error("Last name must be at least 3 characters.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    const phoneRegex = /^[0-9]{11,}$/;
+    if (!phoneRegex.test(formData.phone)) {
+      toast.error("Phone number must be at least 11 digits and numeric.");
+      return;
+    }
+
     try {
-      const response = await axios.post('https://resturant-backend.zeabur.app/api/v1/reservation/send', formData);
-      console.log("Response from backend:", response.data);
-      
-      // Show success toast notification
+      const response = await axios.post(
+        'https://resturant-backend.zeabur.app/api/v1/reservation/send',
+        formData,
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true,
+        }
+      );
+
       toast.success("Reservation submitted successfully! 🎉");
 
-      // Optionally reset form after success
       setFormData({
         firstName: '',
         lastName: '',
@@ -40,10 +68,8 @@ export default function Reservation() {
       });
 
     } catch (error) {
-      console.error("Error sending data:", error.response?.data || error.message);
-      
-      // Show error toast notification
-      toast.error("Failed to submit reservation. Please try again.");
+      const errorMsg = error.response?.data?.message || "Failed to submit reservation. Please try again.";
+      toast.error(errorMsg);
     }
   };
 
@@ -102,7 +128,6 @@ export default function Reservation() {
         </form>
       </div>
 
-      {/* Toast Container to render toast notifications */}
       <ToastContainer 
         position="top-right"
         autoClose={3000}
